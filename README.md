@@ -9,6 +9,8 @@ Both apps are comprised of an HTML file, a CSS file, and a JavaScript file. They
 [Sender App](https://sender-omega.vercel.app/)
 [Receiver App](https://receiver-mu.vercel.app/)
 
+The receiver's application ID is `E5672275`
+
 ## Local Development
 
 Due to the ES6 module requiring the same-origin policy, you will need to run a local server to develop and test changes.
