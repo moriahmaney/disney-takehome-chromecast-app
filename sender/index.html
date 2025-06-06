@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Disney Cast Sender Demo</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="./src/css/styles.css">
+	</head>
+	<body class="body">
+		<div id="content" class="content">
+			<div class="header">
+				<h1>Disney Cast Sender Demo</h1>				
+				<div class="cast-container"><google-cast-launcher></google-cast-launcher></div>
+			</div>
+			<div>
+				<div class="input-container">
+					<input id="message-input" class="input" placeholder="Send a message to Chromecast"></input>
+					<button id="send-button" class="button">Send</button>
+				</div>
+			</div>
+			<footer id="footer" class="footer">
+				<p id="status-text">
+					Disconnected
+				</p>
+			</footer>
+		</div>
+		<script>
+			window['__onGCastApiAvailable'] = function (isAvailable) {
+				if (isAvailable) {
+					initializeCastApi();
+				}
+			};
+			initializeCastApi = function() {
+				cast.framework.CastContext.getInstance().setOptions({
+					receiverApplicationId: 'E5672275',
+					autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED,
+		
+				});
+
+				const context = cast.framework.CastContext.getInstance();
+				context.addEventListener(
+					cast.framework.CastContextEventType.SESSION_STATE_CHANGED,
+					function(event) {
+						switch (event.sessionState) {
+							case cast.framework.SessionState.SESSION_STARTED:
+							case cast.framework.SessionState.SESSION_RESUMED:
+								console.log('CastContext: CastSession started');
+								document.getElementById('footer').setAttribute('class', 'footer connected');
+								document.getElementById('status-text').textContent = 'Connected';
+								break;
+							case cast.framework.SessionState.SESSION_ENDED:
+								console.log('CastContext: CastSession disconnected');
+								document.getElementById('footer').setAttribute('class', 'footer');
+								document.getElementById('status-text').textContent = 'Disconnected';
+								break;
+						}
+					})
+			};
+			</script>
+			<script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+			<script src="./src/js/sender.js" type="module"></script>
+	</body>
+</html>
